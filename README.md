@@ -7,7 +7,7 @@
 - 支持任意文本转QR码（包括中文字符）
 - 自定义颜色和样式
 - 输出base64编码或Data URL格式
-- 支持STDIO和HTTP传输模式
+- 支持STDIO、HTTP和SSE传输模式
 
 ## 安装
 
@@ -28,6 +28,9 @@ python qrcode_mcp_server.py
 
 # HTTP模式（用于网络部署）
 python qrcode_mcp_server.py --http --host 127.0.0.1 --port 8008
+
+# SSE模式（Server-Sent Events）
+python qrcode_mcp_server.py --sse --host 127.0.0.1 --port 8008
 ```
 
 #### 配置Claude Desktop
@@ -53,6 +56,17 @@ python qrcode_mcp_server.py --http --host 127.0.0.1 --port 8008
     "qrcode-mcp": {
       "transport": "http",
       "url": "http://127.0.0.1:8008/mcp/"
+    }
+  }
+}
+```
+
+**SSE模式（Server-Sent Events）：**
+```json
+{
+  "mcpServers": {
+    "qrcode-mcp": {
+      "serverUrl": "http://127.0.0.1:8008/sse"
     }
   }
 }

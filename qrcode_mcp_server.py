@@ -74,11 +74,14 @@ def main_stdio():
     mcp.run(transport='stdio')
 
 
-def main_http(host: str = "127.0.0.1", port: int = 8008):
+def main_remote(host: str = "127.0.0.1", port: int = 8008, transport: str = "http"):
     """HTTP传输模式入口点"""
     import uvicorn
     logger.info(f"启动QR码MCP服务器 (HTTP传输模式) - {host}:{port}")
-    app = mcp.streamable_http_app()
+    if transport == "sse":
+        app = mcp.sse_app()
+    else:
+        app = mcp.streamable_http_app()
     uvicorn.run(app, host=host, port=port)
 
 
@@ -98,13 +101,34 @@ def main_http_with_args():
     parser.add_argument("--port", type=int, default=8008, help="绑定的端口号")
     
     args = parser.parse_args(argv)
-    main_http(args.host, args.port)
+    main_remote(args.host, args.port)
+
+def main_sse_with_args():
+    """带命令行参数解析的HTTP服务器启动器"""
+    import argparse
+    import sys
+    
+    # 如果从主脚本调用，需要过滤掉 --http 参数
+    argv = sys.argv[1:]
+    if argv and argv[0] == "--sse":
+        argv = argv[1:]
+    
+    parser = argparse.ArgumentParser(description="QR码MCP服务器 - SSE传输模式")
+    parser.add_argument("--host", default="127.0.0.1", help="绑定的主机地址")
+    parser.add_argument("--port", type=int, default=8008, help="绑定的端口号")
+    
+    args = parser.parse_args(argv)
+    main_remote(args.host, args.port, transport="sse")
+
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "--http":
         # HTTP模式：python qrcode_mcp_server.py --http [--host HOST] [--port PORT]
         main_http_with_args()
+    elif len(sys.argv) > 1 and sys.argv[1] == "--sse":
+        # SSE模式：python qrcode_mcp_server.py --sse [--host HOST] [--port PORT]
+        main_sse_with_args()
     else:
         # 默认使用STDIO模式
         main_stdio() 
