@@ -1,42 +1,42 @@
-# QR码生成MCP服务器
+# QR Code Generation MCP Server
 
-一个使用FastMCP实现的QR码生成MCP服务器，支持将文本转换为QR码图像并返回base64编码。
+A QR code generation MCP server implemented using FastMCP, supporting text-to-QR code conversion with base64 encoding output.
 
-## 功能特性
+## Features
 
-- 支持任意文本转QR码（包括中文字符）
-- 自定义颜色和样式
-- 输出base64编码或Data URL格式
-- 支持STDIO、HTTP和SSE传输模式
+- Support for any text to QR code conversion (including Chinese characters)
+- Customizable colors and styles
+- Base64 encoding
+- Support for STDIO, HTTP, and SSE transport modes
 
-## 安装
+## Installation
 
 ```bash
 uv sync
-# 或者
-pip install qrcode[pil] Pillow mcp
+# or
+pip install qrcode Pillow mcp
 ```
 
-## 使用方法
+## Usage
 
-### 1. MCP服务器模式
+### 1. MCP Server Mode
 
-#### 启动服务器
+#### Start Server
 ```bash
-# STDIO模式（用于Claude Desktop）
+# STDIO mode (for Claude Desktop)
 python qrcode_mcp_server.py
 
-# HTTP模式（用于网络部署）
+# HTTP mode
 python qrcode_mcp_server.py --http --host 127.0.0.1 --port 8008
 
-# SSE模式（Server-Sent Events）
+# SSE mode (Server-Sent Events) Deprecated
 python qrcode_mcp_server.py --sse --host 127.0.0.1 --port 8008
 ```
 
-#### 配置Claude Desktop
-在`~/Library/Application Support/Claude/claude_desktop_config.json`中添加：
+#### Configure Claude Desktop
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
-**STDIO模式（本地使用）：**
+**STDIO Mode (Local Use):**
 ```json
 {
   "mcpServers": {
@@ -49,7 +49,7 @@ python qrcode_mcp_server.py --sse --host 127.0.0.1 --port 8008
 }
 ```
 
-**HTTP模式（网络部署）：**
+**HTTP Mode (Network Deployment):**
 ```json
 {
   "mcpServers": {
@@ -61,7 +61,7 @@ python qrcode_mcp_server.py --sse --host 127.0.0.1 --port 8008
 }
 ```
 
-**SSE模式（Server-Sent Events）：**
+**SSE Mode (Server-Sent Events):**
 ```json
 {
   "mcpServers": {
@@ -72,15 +72,15 @@ python qrcode_mcp_server.py --sse --host 127.0.0.1 --port 8008
 }
 ```
 
-### 2. 直接使用Python API
+### 2. Direct Python API Usage
 
 ```python
 from qrcode_utils import text_to_qr_base64
 
-# 基本使用
+# Basic usage
 base64_result = text_to_qr_base64("Hello, World!")
 
-# 自定义样式
+# Custom styling
 base64_result = text_to_qr_base64(
     "Custom QR Code",
     box_size=15,
@@ -89,25 +89,25 @@ base64_result = text_to_qr_base64(
 )
 ```
 
-## MCP工具
+## MCP Tools
 
 ### `generate_qr_code`
-生成QR码并返回base64编码。
+Generate QR code and return base64 encoding.
 
-**参数：**
-- `text` (required): 要转换的文本内容
-- `box_size` (optional): 每个方块像素大小，默认10
-- `border` (optional): 边框方块数量，默认4
-- `fill_color` (optional): 前景色，默认"black"
-- `back_color` (optional): 背景色，默认"white"
-- `return_data_url` (optional): 是否返回Data URL格式，默认false
+**Parameters:**
+- `text` (required): Text content to convert
+- `box_size` (optional): Pixel size of each box, default 10
+- `border` (optional): Number of border boxes, default 4
+- `fill_color` (optional): Foreground color, default "black"
+- `back_color` (optional): Background color, default "white"
+- `return_data_url` (optional): Whether to return Data URL format, default false
 
-## 测试
+## Testing
 
 ```bash
 python test_mcp_client.py
 ```
 
-## 许可证
+## License
 
 MIT License 
